@@ -56,9 +56,19 @@ begin
 					state <= decompte;
 					end if;
 		when compte => 	if cnt_one_enable='1'then
+						if unit4 <= "1001" then unit4 <= "0000"
+						diz4 <= (diz4 + '1')
+							if diz4 <= "1001" then diz4 <= "0000"
+								unit4<="0"
+						else unit4<=unit4+'1'
 
-		when decompte => if cnt_one_enable='1' then 
 
+		when decompte => if cnt_one_enable='1' then
+						if unit4 <= "0000" then unit4 <= "1001"
+						 diz4 <= (diz4 - '1')
+							if diz4 <= "000" then diz4 <= "1001"
+								unit4<="1001"
+						else unit4<=unit4 - '1'
 		end case;
   end if;
 end process;
