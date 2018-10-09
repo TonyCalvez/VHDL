@@ -8,7 +8,7 @@
 
 ### Introduction
 
-Suite au cours d'électrotechnique et de système sur puce, nous devons mettre au point une technologie pour générer des signaux PWM.
+Suite au cours d'électrotechnique et de système sur puce, nous devons mettre au point une technologie pour générer des signaux PWM. La modulation PWM, ou MLI (Modulation à Largeur d'Impulsions) en français, est une technique utilisée pour synthétiser des signaux analogiques.
 
 ### 1. Mise en place
 
@@ -32,7 +32,7 @@ Nous avons à notre disposition deux technologies avec les codes sources pour le
   - hello_altera_avalon_pwm.c
   - altera_avalon_pwm_routines.c
 
-----------------------
+--------------
 
 
 #### 1.3 Architecture :
@@ -41,11 +41,19 @@ Le cahier des charges nous impose cette architecture :
 
 ![](ARCHITECTURE.png)
 
-
+----------------
 
 #### 1.4  Comment est généré le PWM?:
 
+**SCHEMATIQUE : **
+
+![](avalaon_enable.JPG)
+
+#### 1.5  Les signaux PWM:
+
 ![PWM_waveform](PWM_waveform.JPG)
+
+C'est la modification de la valeur de pwm_duty_cycle qui va imposer la largeur de l'impulsion du système PWM.
 
 -------------------------
 
@@ -53,11 +61,13 @@ Le cahier des charges nous impose cette architecture :
 
 #### 2.1 Qu'est ce que le VHDL?
 
-Le VHDL est un langage de programmation qui décrit le matériel et son comportement. Couplé avec un FPGA, celui-ci peut gérer le parallélisme.
+Le VHDL est un langage de décription matériel qui décrit le matériel et son comportement. Couplé avec un FPGA, celui-ci peut gérer le parallélisme.
+
+A partir de ce langage, on peut définir un système par une structure hiérarchique de fonctions, par une structure matérielle, en encore par une modélisation temporelle.
 
 #### 2.2 Le Code Source:
 
-Nous avons un code VHDL par composant présent dans notre projet.
+Nous avons un code VHDL par composant présent dans notre projet. On créé un Custom Logic PWM.
 
 ##### 2.2.1 Interprétation de `pwm_task_logic.vhd`:
 
@@ -106,18 +116,14 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 ````
 
-
-
-Nous nommons notre testbench:
+Nous créons une entité -un composant - testbench:
 
 ````vhdl
 entity pwm_task_logic_testbench is
 end pwm_task_logic_testbench;
 ````
 
-
-
-Nous intégrons une architecture, revient à dire que nous créons un composant qui sera capable de se greffer afin de générer des signaux en entrée et pouvoir lire les signaux en sortie.
+Nous intégrons une architecture, c'est à dire que nous implémentons un comportement pour le composant TestBench. Il sera capable de s'y greffer afin de générer des signaux en entrée et pouvoir lire les signaux en sortie.
 
 ````vhdl
 architecture testbench of pwm_task_logic_testbench is
@@ -148,9 +154,9 @@ signal s_clk                : std_logic :='0';
 signal running              : boolean :=true;
 `````
 
+---------------
 
-
-Par la suite, nous devons connecter notre testbench avec task_logic ou register_file afin de réaliser un   `port map`. 
+Par la suite, la création du  `port map` nous permettra de connecter notre testbench avec task_logic ou register_file. 
 
 Afin de simuler les deux simultanément, nous devons inscrire les entrées et sorties de chacun dans un `DUT` différent. 
 
@@ -187,7 +193,7 @@ Nous devons mettre à l'état haut notre signal `pwm_out`à partir du code de `p
 Suite à nos recherches, nous avons déduit que :
 
 ```mathematica
-pwn_out = {
+pwm_out = {
     s_resetn = 1
     s_avalon_chip_select = 1
     s_writep = 1
@@ -200,7 +206,7 @@ pwn_out = {
 
 -------------------------
 
-Dans cette dernière partie, nous simulons des états hauts ou des états bas pour notre système.
+Dans cette dernière partie, nous simulerons des états hauts ou des états bas pour simuler et metre à l'épreuve notre système.
 
 **Explication** :
 
@@ -257,22 +263,11 @@ s_duty_cycle <= x"00000000", x"00000001" after 100 ns, x"00000002" after 120 ns,
 
 Nous pouvons faire l'analogie entre le code C et le code VHDL.
 
-##### 4.1.1 pwm_enable
-
-Nous observons que la fonction C importe toujours les données :
+Nous observons que la fonction C va permettre de générer les signaux à l'entrée de notre code VHDL.          Ceci afin d'écrire dans les registres via le bus avalon, ainsi il suffira de modifier le code C pour modifier le comportement du signal de sortie :
 
 - address 
-
 - duty_cycle
-
 - clock_divider
-
-
-
-
-**SCHEMATIQUE : **
-
-![](avalaon_enable.JPG)
 
 --------------------------
 
@@ -326,7 +321,13 @@ int altera_avalon_pwm_enable(unsigned int address)
 }
 ```
 
-Nous pouvons observer sur cet exemple que le code C écrit les valeurs sur le bus Avalon vers le   `pwm_register_file.vhd` créé en VHDL.
+Nous pouvons observer sur cet exemple que le code C écrit les valeurs vers le   `pwm_register_file.vhd` créé en VHDL via l'adressage (memory map) du bus Avalon.
+
+#### 4.2 Synthèse :
+
+![](conclusion.png)
+
+------------------
 
 ### 5. Téléversement du code
 
@@ -344,7 +345,7 @@ Nous pouvons maintenant téléverser sur la carte l'ensemble de notre projet à 
 
 ![](photo.jpg)
 
-Nous observons que le PWM est simulé sur une LED pour faciliter la visualisation du fonctionnement. Toutefois pour être bien, il aurait été logique que si notre carte était connectée à un circuit de puissance, nous aurions mis en sorti un PIN pour y connecter un transistor de puissance.
+Nous observons que le PWM est simulé sur une LED pour faciliter la visualisation du fonctionnement. Toutefois, si notre carte était connectée à un circuit de puissance, nous aurions mis en sorti un PIN pour y connecter un transistor de puissance.
 
 -------------------------
 
@@ -364,8 +365,6 @@ Le projet se sépare en deux parties :
 
 - un script pour la compilation et les signaux
 
-
-
   **compteur.py**
 
 ```python
@@ -380,7 +379,7 @@ def compteur(count, enable, clock, reset):
     return plusun
 ```
 
-​	**compteur_compile.py**
+	**compteur_compile.py**
 
 ```python
 from myhdl import Signal, ResetSignal, modbv
@@ -447,4 +446,4 @@ end architecture MyHDL;
 
 
 
-Nous aurions souhaité téléverser dans la carte DE2, or Quartus refuse de compiler car le second fichier VHDL servant de bibliothèque souhaite écriture dans une mémoire non permise en écriture.
+Nous aurions souhaité téléverser dans la carte DE2, or Quartus refuse de compiler car le second fichier VHDL servant de bibliothèque. En effet, il touche à une zone mémoire dans la memory map interdite en  écriture.
