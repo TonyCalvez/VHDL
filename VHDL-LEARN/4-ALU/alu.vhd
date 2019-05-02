@@ -8,12 +8,11 @@ entity alu is
 	a 		: in signed(3 downto 0);
 	b 		: in signed(3 downto 0);
  	sel 	: in std_logic_vector(2 downto 0);
- 	result 	: out signed(3 downto 0)
+ 	result 	: out signed(7 downto 0)
  	);
 end entity ;
 
 architecture rising_edge of alu is
-
 begin
 
 	basc_proc : process(clk)
@@ -23,8 +22,8 @@ begin
 				result<= a + b; --addition 
 			when "001" => 
 				result<= a - b; --subtraction 
-			when "010" => 
-				result<= a * b; --mult 
+			when "010" =>
+				result <= signed(a) * signed(b); 
 			when "011" => 
 				result<= a and b; --AND gate 
 			when "100" => 
