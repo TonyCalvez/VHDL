@@ -1,0 +1,7 @@
+v 4
+file . "bascule_d_nbbits_tb.vhd" "9203eda93c5848a1e785a4fb3712b6f8deef6e36" "20190502165530.380":
+  entity bascule_d_nbbits_tb at 6( 275) + 0 on 13;
+  architecture bhv of bascule_d_nbbits_tb at 13( 388) + 0 on 14;
+file . "bascule_d_nbbits.vhd" "2dc459c72559ce5e8e10227cc460728d18627f88" "20190502165530.352":
+  entity bascule_d_nbbits at 1( 0) + 0 on 11;
+  architecture using_rising_edge of bascule_d_nbbits at 15( 334) + 0 on 12;

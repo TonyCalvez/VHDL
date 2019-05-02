@@ -1,4 +1,0 @@
-v 4
-file . "bascule_d_gen.vhd" "082536186053ebf438a9f89d4d5bb0e868392f02" "20190502122229.423":
-  entity bascule_d_gen at 1( 0) + 0 on 11;
-  architecture using_rising_edge of bascule_d_gen at 15( 328) + 0 on 12;

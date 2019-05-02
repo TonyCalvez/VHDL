@@ -2,7 +2,7 @@ library ieee;
 	use ieee.std_logic_1164.all;
 	use ieee.numeric_std.all;
 
-entity bascule_d_gen is
+entity bascule_d_nbbits is
 	generic (nb_bit : natural := 8);
   port (
   	reset_n : in  std_logic;	
@@ -10,9 +10,9 @@ entity bascule_d_gen is
 	input	: in  std_logic_vector(nb_bit-1 downto 0);
 	output  : out std_logic_vector(nb_bit-1 downto 0)
   );
-end entity ; -- bascule_d_gen
+end entity ; -- bascule_d_nbbits
 
-architecture using_rising_edge of bascule_d_gen is
+architecture using_rising_edge of bascule_d_nbbits is
 	signal data : std_logic_vector(nb_bit-1 downto 0);
 begin
 

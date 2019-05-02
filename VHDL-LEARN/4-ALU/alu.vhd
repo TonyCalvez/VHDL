@@ -3,19 +3,17 @@ library ieee;
 	use ieee.numeric_std.all;
 
 entity alu is
-  port (
-  	clk		: in  std_logic;
-	a 		: in signed(3 downto 0);
-	b 		: in signed(3 downto 0);
- 	sel 	: in std_logic_vector(2 downto 0);
- 	result 	: out signed(7 downto 0)
- 	);
-end entity ;
+	port (
+	  	clk		: in  std_logic;
+		a 		: in signed(3 downto 0);
+		b 		: in signed(3 downto 0);
+	 	sel 	: in std_logic_vector(2 downto 0);
+	 	result 	: out signed(3 downto 0)
+	);
+	
+end entity alu;
 
 architecture rising_edge of alu is
-signal y1_int, y2_int : signed(3 downto 0);
-
-
 begin
 
 	basc_proc : process(clk)
@@ -26,9 +24,7 @@ begin
 			when "001" => 
 				result<= a - b; --subtraction 
 			when "010" =>
-				y1_int <= a;
-				y2_int <= b;
-				result <= signed(y1_int) * signed(y2_int);
+				result <= unsigned (a) * unsigned (b); 
 			when "011" => 
 				result<= a and b; --AND gate 
 			when "100" => 

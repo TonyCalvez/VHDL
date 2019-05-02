@@ -29,14 +29,13 @@ architecture bhv of alu_tb is
   signal a      : signed(3 downto 0);
   signal b      : signed(3 downto 0);
   signal sel    : std_logic_vector(2 downto 0);
-  signal result : signed(7 downto 0);
-  signal y1_int, y2_int : signed(3 downto 0);
+  signal result : signed(3 downto 0);
 
 begin
   -------------------------------------------------------------------
   -- clock and reset
   -------------------------------------------------------------------
-  reset_n <= '0','1' after 666 ns;
+  reset_n <= '0','1' after 10 ps;
 
   clk <= not(clk) after HALF_PERIOD when running else clk;
 

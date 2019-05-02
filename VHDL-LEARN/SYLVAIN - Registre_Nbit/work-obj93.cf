@@ -1,7 +1,0 @@
-v 4
-file . "dff_tb.vhd" "5d4d1ccb484eee7250a125e1ab7a7edd943ca83e" "20190502120106.059":
-  entity dff_tb at 6( 275) + 0 on 13;
-  architecture bhv of dff_tb at 13( 375) + 0 on 14;
-file . "dff.vhd" "2b7f387c0db6860ccafe2bf8bea7aa44d2c1b0fa" "20190502120106.026":
-  entity dff at 1( 0) + 0 on 11;
-  architecture rtl of dff at 14( 270) + 0 on 12;

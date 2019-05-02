@@ -8,19 +8,18 @@ entity bascule_d is
 	input	: in  std_logic;
 	output  : out std_logic
   ) ;
-end entity ;
+end entity ; -- bascule_d
 
-architecture rising_edge of bascule_d is
+architecture simulation of bascule_d is
 
 begin
 
-	basc_proc : process(clk)
-	begin
+	process(clk)   --need to use processes to describe registers
+	begin		 			   --only clock is necessary
 		
-		if rising_edge(clk) then
+		if rising_edge(clk) then	--or : clk ' event and clk = '1'
 			output <=input;
 		end if;
-	
 	end process;
 	
-end rising_edge;
+end simulation ; -- arch

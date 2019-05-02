@@ -1,19 +1,19 @@
 -----------------------------------------------------------------
 -- This file was generated automatically by vhdl_tb Ruby utility
--- date : (d/m/y) 01/05/2019 16:34
+-- date : (d/m/y) 02/05/2019 18:53
 -- Author : Jean-Christophe Le Lann - 2014
 -----------------------------------------------------------------
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-entity dff_tb is
+entity bascule_d_nbbits_tb is
 end entity;
 
-architecture bhv of dff_tb is
-  constant n : natural := 4;
-  constant HALF_PERIOD : time := 5 ns;
+architecture bhv of bascule_d_nbbits_tb is
 
+  constant HALF_PERIOD : time := 5 ns;
+  constant nb_bit : natural := 8;
   signal clk     : std_logic := '0';
   signal reset_n : std_logic := '0';
   signal sreset  : std_logic := '0';
@@ -26,29 +26,28 @@ architecture bhv of dff_tb is
      end loop;
    end procedure;
 
-  signal reset  : std_logic;
-  signal ENTREE : std_logic_vector(N - 1 downto 0);
-  signal SORTIE : std_logic_vector(N - 1 downto 0);
+  signal input   : std_logic_vector(nb_bit - 1 downto 0);
+  signal output  : std_logic_vector(nb_bit - 1 downto 0);
 
 begin
   -------------------------------------------------------------------
   -- clock and reset
   -------------------------------------------------------------------
-  reset_n <= '0','1' after 10 ns;
+  reset_n <= '0','1' after 666 ns;
 
   clk <= not(clk) after HALF_PERIOD when running else clk;
 
   --------------------------------------------------------------------
   -- Design Under Test
   --------------------------------------------------------------------
-  dut : entity work.dff(rtl)
+  dut : entity work.bascule_d_nbbits(using_rising_edge)
         generic map(
-          N => 4)
+          nb_bit => 8)
         port map (
-          clk    => clk   ,
-          reset  => reset ,
-          ENTREE => ENTREE,
-          SORTIE => SORTIE
+          reset_n => reset_n,
+          clk     => clk    ,
+          input   => input  ,
+          output  => output 
         );
 
   --------------------------------------------------------------------
@@ -56,24 +55,13 @@ begin
   --------------------------------------------------------------------
   stim : process
    begin
-     report "running testbench for dff(using_rising_edge)";
+     report "running testbench for bascule_d_nbbits(using_rising_edge)";
      report "waiting for asynchronous reset";
      wait until reset_n='1';
-     wait_cycles(1);
+     wait_cycles(10);
      report "applying stimuli...";
-     ENTREE <= "0001";
-     wait_cycles(3);
-     report "applying stimuli...";
-     ENTREE <= "0011";
-     wait_cycles(2);
-     report "applying stimuli...";
-     ENTREE <= "0101";
-     wait_cycles(4);
-     ENTREE <= "0001";
-     wait_cycles(6);
-     report "applying stimuli...";
-     ENTREE <= "1011";
-     wait_cycles(3);
+     input <= "00000000","00000001" after 100 ns, "11111111" after 200 ns;
+     wait_cycles(100);
      report "end of simulation";
      running <=false;
      wait;
