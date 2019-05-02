@@ -3,17 +3,17 @@ library ieee;
 	use ieee.numeric_std.all;
 
 entity bascule_d_gen is
-	generic (NB_BITS : natural := 8);
+	generic (nb_bit : natural := 8);
   port (
   	reset_n : in  std_logic;	
 	clk		: in  std_logic;
-	input	: in  std_logic_vector(NB_BITS-1 downto 0);
-	output  : out std_logic_vector(NB_BITS-1 downto 0)
+	input	: in  std_logic_vector(nb_bit-1 downto 0);
+	output  : out std_logic_vector(nb_bit-1 downto 0)
   );
 end entity ; -- bascule_d_gen
 
 architecture using_rising_edge of bascule_d_gen is
-	signal data : std_logic_vector(NB_BITS-1 downto 0);
+	signal data : std_logic_vector(nb_bit-1 downto 0);
 begin
 
 	basc_gen_proc : process(reset_n, clk) --need to use processes to describe registers

@@ -8,19 +8,19 @@ entity bascule_d is
 	input	: in  std_logic;
 	output  : out std_logic
   ) ;
-end entity ; -- bascule_d
+end entity ;
 
-architecture using_rising_edge of bascule_d is
+architecture rising_edge of bascule_d is
 
 begin
 
-	basc_proc : process(clk)   --need to use processes to describe registers
-	begin		 			   --only clock is necessary
+	basc_proc : process(clk)
+	begin
 		
-		if rising_edge(clk) then	--or : clk ' event and clk = '1'
+		if rising_edge(clk) then
 			output <=input;
 		end if;
 	
 	end process;
 	
-end using_rising_edge ; -- arch
+end rising_edge;

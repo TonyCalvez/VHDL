@@ -2,18 +2,17 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-entity bascule_d_gen_tb is
+entity ual_tb is
 end entity;
 
-architecture bhv of bascule_d_gen_tb is
+architecture bhv of ual_tb is
 
   constant HALF_PERIOD : time := 5 ns;
-  constant NB_BITS : natural := 8;
+
+  signal clk     : std_logic := '0';
+  signal reset_n : std_logic := '0';
   signal sreset  : std_logic := '0';
   signal running : boolean   := true;
-  
-  signal reset_n : std_logic := '0';
-  signal clk     : std_logic := '0';
 
   procedure wait_cycles(n : natural) is
    begin
@@ -22,24 +21,28 @@ architecture bhv of bascule_d_gen_tb is
      end loop;
    end procedure;
 
-   signal input   : std_logic_vector(NB_BITS - 1 downto 0) := (others => '1');
-   signal output  : std_logic_vector(NB_BITS - 1 downto 0) := (others => '0');
+  signal a   : signed(3 downto 0) := "0011";
+  signal b   : signed(3 downto 0) := "1110";
+  signal op  : std_logic_vector(2 downto 0);
+  signal res : signed(3 downto 0);
 
 begin
   -------------------------------------------------------------------
   -- clock and reset
   -------------------------------------------------------------------
+  reset_n <= '0','1' after 666 ns;
   clk <= not(clk) after HALF_PERIOD when running else clk;
 
   --------------------------------------------------------------------
   -- Design Under Test
   --------------------------------------------------------------------
-  dut : entity work.bascule_d_gen(using_rising_edge)
+  dut : entity work.ual(rtl)
+        
         port map (
-          reset_n => reset_n,
-          clk     => clk    ,
-          input   => input  ,
-          output  => output 
+          a   => a  ,
+          b   => b  ,
+          op  => op ,
+          res => res
         );
 
   --------------------------------------------------------------------
@@ -47,16 +50,25 @@ begin
   --------------------------------------------------------------------
   stim : process
    begin
-     report "running testbench for bascule_d_gen(using_rising_edge)";
+     report "running testbench for ual(rtl)";
      report "waiting for asynchronous reset";
      wait until reset_n='1';
-
-      input <= "00000000";
-
-      END LOOP;
-      
-      wait FOR period;
-
+     wait_cycles(100);
+     report "applying stimuli...";
+	 op <= "000";
+     wait_cycles(100);
+	 op <= "001";
+     wait_cycles(100);
+	 op <= "010";
+     wait_cycles(100);
+	 op <= "011";
+     wait_cycles(100);
+	 op <= "100";
+     wait_cycles(100);
+	 op <= "101";
+     wait_cycles(100);
+	 op <= "111";
+	 wait_cycles(100);
      report "end of simulation";
      running <=false;
      wait;
