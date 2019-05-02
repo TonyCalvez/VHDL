@@ -30,6 +30,7 @@ architecture bhv of alu_tb is
   signal b      : signed(3 downto 0);
   signal sel    : std_logic_vector(2 downto 0);
   signal result : signed(7 downto 0);
+  signal y1_int, y2_int : signed(3 downto 0);
 
 begin
   -------------------------------------------------------------------

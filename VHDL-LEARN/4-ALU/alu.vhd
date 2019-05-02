@@ -13,6 +13,9 @@ entity alu is
 end entity ;
 
 architecture rising_edge of alu is
+signal y1_int, y2_int : signed(3 downto 0);
+
+
 begin
 
 	basc_proc : process(clk)
@@ -23,7 +26,9 @@ begin
 			when "001" => 
 				result<= a - b; --subtraction 
 			when "010" =>
-				result <= signed(a) * signed(b); 
+				y1_int <= a;
+				y2_int <= b;
+				result <= signed(y1_int) * signed(y2_int);
 			when "011" => 
 				result<= a and b; --AND gate 
 			when "100" => 
