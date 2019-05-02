@@ -1,19 +1,16 @@
 #!/bin/bash
+export DISPLAY=:0
 
-ghdl -a counter_enable.vhd
-echo 'VHDL compiled, Binary generated!'
-echo '================================'
+rm work-obj93.cf
 
-ghdl -a counter_enable_tb.vhd
-echo 'Testbench compiled, Binary generated!'
-echo '================================'
+rm ual.ghw
 
-ghdl -e counter_enable_tb
-echo 'Elaboration completed!'
-echo '================================'
+ghdl -a counter.vhd
 
-ghdl -r counter_enable_tb --wave=counter_enable.ghw
-echo 'Waveform generated!'
-echo '================================'
+ghdl -a counter_tb.vhd
 
-open -a gtkwave counter_enable.ghw 
+ghdl -e counter_tb
+
+ghdl -r counter_tb --wave=counter.ghw
+
+open -a gtkwave counter.ghw 

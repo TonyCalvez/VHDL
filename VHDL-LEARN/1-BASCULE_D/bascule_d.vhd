@@ -10,7 +10,7 @@ entity bascule_d is
   ) ;
 end entity ; -- bascule_d
 
-architecture simulation of bascule_d is
+architecture using_rising_edge of bascule_d is
 
 begin
 
@@ -22,4 +22,4 @@ begin
 		end if;
 	end process;
 	
-end simulation ; -- arch
+end using_rising_edge ; -- arch
