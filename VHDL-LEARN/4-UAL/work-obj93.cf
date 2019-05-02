@@ -1,7 +1,0 @@
-v 4
-file . "ual_tb.vhd" "8345aff9be755a35ccd5a190bfe1bdc93b0157c1" "20190502131910.964":
-  entity ual_tb at 6( 275) + 0 on 13;
-  architecture bhv of ual_tb at 13( 375) + 0 on 14;
-file . "ual.vhd" "04f71ab07f2298de71d89ab51b20fa4df79ecd5b" "20190502131910.937":
-  entity ual at 1( 0) + 0 on 11;
-  architecture rtl of ual at 13( 236) + 0 on 12;
