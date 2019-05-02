@@ -62,8 +62,8 @@ begin
      wait until reset_n='1';
      wait_cycles(100);
      report "applying stimuli...";
-      inp_a <= "0001";
-      inp_b <= "1111";
+      a <= "0001";
+      b <= "1111";
       sel <= "000";
       wait for 100 ns;
       sel <= "001";
