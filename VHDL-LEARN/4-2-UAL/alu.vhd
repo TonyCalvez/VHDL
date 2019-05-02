@@ -24,17 +24,15 @@ begin
 			when "001" => 
 				result<= a - b; --subtraction 
 			when "010" => 
-				result<= a - 1; --sub 1 
+				result<= a * b; --mult 
 			when "011" => 
-				result<= a + 1; --add 1 
-			when "100" => 
 				result<= a and b; --AND gate 
+			when "100" => 
+				result<= a or b; --OR gate
 			when "101" => 
-				result<= a or b; --OR gate 
+				result<= a xor b; --XOR gate 
 			when "110" => 
 				result<= not a ; --NOT gate 
-			when "111" => 
-				result<= a xor b; --XOR gate 
 			when others =>
 				NULL;
 		end case;
