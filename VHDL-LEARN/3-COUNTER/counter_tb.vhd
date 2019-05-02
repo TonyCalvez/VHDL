@@ -1,11 +1,16 @@
+-----------------------------------------------------------------
+-- This file was generated automatically by vhdl_tb Ruby utility
+-- date : (d/m/y) 02/05/2019 23:04
+-- Author : Jean-Christophe Le Lann - 2014
+-----------------------------------------------------------------
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-entity ram_tb is
+entity counter_tb is
 end entity;
 
-architecture bhv of ram_tb is
+architecture bhv of counter_tb is
 
   constant HALF_PERIOD : time := 5 ns;
 
@@ -21,30 +26,26 @@ architecture bhv of ram_tb is
      end loop;
    end procedure;
 
-  signal wr      : std_logic := '0';
-  signal address : unsigned(7 downto 0) := (others => '0');
-  signal datain  : std_logic_vector(7 downto 0) := (others => '0');
-  signal dataout : std_logic_vector(7 downto 0) := (others => '0');
+  signal input  : std_logic;
+  signal output : std_logic_vector(3 downto 0);
 
 begin
   -------------------------------------------------------------------
   -- clock and reset
   -------------------------------------------------------------------
   reset_n <= '0','1' after 10 ns;
+
   clk <= not(clk) after HALF_PERIOD when running else clk;
 
   --------------------------------------------------------------------
   -- Design Under Test
   --------------------------------------------------------------------
-  dut : entity work.ram(rtl)
+  dut : entity work.counter(bhv)
         
         port map (
-          reset_n => reset_n,
-          clk     => clk    ,
-          wr      => wr     ,
-          address => address,
-          datain  => datain ,
-          dataout => dataout
+          clk    => clk   ,
+          input  => input ,
+          output => output
         );
 
   --------------------------------------------------------------------
@@ -52,21 +53,25 @@ begin
   --------------------------------------------------------------------
   stim : process
    begin
-     report "running testbench for ram(rtl)";
+     report "running testbench for counter(bhv)";
      report "waiting for asynchronous reset";
      wait until reset_n='1';
      wait_cycles(100);
-	 
-	 report "writing memory";
-	 wr <= '1';
-     for i in 0 to 127 loop
-       wait_cycles(10);
-       address <= to_unsigned(i,8);
-       datain <= std_logic_vector(to_unsigned(i,8));
-     end loop;
-     wr <= '0';
-	 wait_cycles(100);
-	 
+     report "applying stimuli...";
+     input <= '1';
+     wait_cycles(1);
+     input <= '0';
+     wait_cycles(1);
+     input <= '1';
+     wait_cycles(1);
+     input <= '0';
+     wait_cycles(1);
+     output <= "0111";
+     wait_cycles(1);
+     input <= '1';
+     wait_cycles(1);
+     input <= '0';
+     wait_cycles(100);
      report "end of simulation";
      running <=false;
      wait;

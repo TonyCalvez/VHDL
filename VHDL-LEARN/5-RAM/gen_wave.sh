@@ -3,7 +3,7 @@ export DISPLAY=:0
 
 rm work-obj93.cf
 
-rm ual.ghw
+rm ram.ghw
 
 ghdl -a ram.vhd
 
