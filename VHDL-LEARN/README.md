@@ -223,33 +223,37 @@ Ce fichier comporte les pins suivants :
 
 ```vhdl
 library ieee;
-	use ieee.std_logic_1164.all;
-	use ieee.numeric_std.all;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
 
 entity counter is
-	port (
-	clk 		: in std_logic;
-	input 		: in std_logic;
-	output 		: out std_logic_vector(3 downto 0)
-	);
+  port (
+    reset_n : in  std_logic;
+    clk     : in  std_logic;
+    output      : out std_logic_vector(9 downto 0)); 
 end counter;
+
+
 architecture bhv of counter is
- signal s_output : unsigned(3 downto 0);
- begin
- process (clk)
- 	begin
- 		if rising_edge(clk) then
-	 		if (input = '1') then
-	 			if s_output >= "1000" then
-	 				s_output <= "0000";
-	 			else
-	 				s_output <= s_output + 1;
-	 			end if;
-	 		end if;
- 		end if;
- 		output <= std_logic_vector(s_output);
- 	end process;
- end;
+  signal value : unsigned(9 downto 0);
+begin
+
+  process(clk)
+  begin
+    if reset_n = '0' then
+      value <= (others => '0');
+    elsif rising_edge(clk) then
+      value <= value + 1;
+      if value = 1000 then
+        value <= (others => '0');
+      end if;
+      
+    end if;
+  end process;
+
+  output <= std_logic_vector(value);
+  
+end bhv;
 ```
 
 ##### 2.3.2  TestBench `counter_tb.vhd`:
@@ -259,29 +263,30 @@ Le test bench est généré à partir de la commande : `vhdl_tb counter.vhd`
 J'ai ajouté le stimuli suivant :
 
 ```vhdl
-     input <= '1';
-     wait_cycles(1);
-     input <= '0';
-     wait_cycles(1);
-     input <= '1';
-     wait_cycles(1);
-     input <= '0';
-     wait_cycles(1);
-     output <= "0111";
-     wait_cycles(1);
-     input <= '1';
-     wait_cycles(1);
-     input <= '0';
-     wait_cycles(100);
+    reset_n <= '0';--inactif
+    
+    for i in 0 to 100 loop
+      wait until rising_edge(clk);
+    end loop;
+
+    reset_n <= '1';--actif
+    report "now active!";
+    
+    for i in 0 to 1010 loop
+      wait until rising_edge(clk);
+    end loop;
+    running <= false;
+    wait;
+   end process;
 ```
 
 
 
-##### 2.3.3 ModelSim `coounter_tb.vhd`:
+##### 2.3.3 ModelSim `counter_tb.vhd`:
 
 ![](3-COUNTER/IMG.JPG)
 
-Nous pouvons observer que le code ne fonctionne pas. En effet, le input ne change jamais de valeur.
+Nous avons bien `reset_n` qui démarre le processus de comptage.
 
 -------------------------
 
